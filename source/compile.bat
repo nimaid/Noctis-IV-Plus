@@ -21,7 +21,8 @@ make -fnoctis.mak -DALL=DEF_ALL -B
 rem Handle failure to build
 if exist bin\noctis.exe goto success
 echo Build failed!
-pause
+echo Press any key to exit . . .
+pause >nul
 goto done
 
 rem Handle successful build
