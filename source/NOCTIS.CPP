@@ -445,6 +445,7 @@ long goesfile_pos = 0;			// Posizione sul file output di GOES.
 char goesnet_command[120] = "_";	// Command line di GOES Net.
 char *comm = "..\\DATA\\COMM.BIN";	// File di comunicazione dei moduli.
 int roofspeed;
+char space_mouselook = 0;
 /* Congela la situazione (all'uscita dal programma o al run di un modulo). */
 
 void freeze ()
@@ -460,6 +461,7 @@ void freeze ()
 	WRITEFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 	WRITEFILE (fh, &roofspeed, sizeof(roofspeed));
 	WRITEFILE (fh, &option_antialias_in_stardrifter, sizeof(option_antialias_in_stardrifter));
+    WRITEFILE (fh, &space_mouselook, sizeof(space_mouselook));
 	_close (fh);
 }
 
@@ -1988,6 +1990,7 @@ void unfreeze ()
 		READFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 		READFILE (fh, &roofspeed, sizeof(roofspeed));
 		READFILE (fh, &option_antialias_in_stardrifter, sizeof(option_antialias_in_stardrifter));
+        READFILE (fh, &space_mouselook, sizeof(space_mouselook));
 		strcpy(fcs_status_extended, fcs_status_extended);
 		_close (fh);
 	}
@@ -2375,11 +2378,22 @@ void main ()
 		mouse_input ();
 		if (mpul&2) {
 			shift += 3*mdltx;
-			dlt_alfa -= (float) mdlty / 8;
+            if (space_mouselook == 0) {
+                dlt_alfa -= (float) mdlty / 8;
+            } else {
+                step -= 3*mdlty;
+                if (abs(mdlty)>7) dlt_alfa = -user_alfa / 6;
+            }
 		}
 		else {
-			step -= 3*mdlty;
-			if (abs(mdlty)>7) dlt_alfa = -user_alfa / 6;
+            if (space_mouselook == 1) {
+                dlt_alfa += (float) mdlty / 8;
+            } else if (space_mouselook == 2) {
+                dlt_alfa -= (float) mdlty / 8;
+            } else {
+			    step -= 3*mdlty;
+                if (abs(mdlty)>7) dlt_alfa = -user_alfa / 6;
+            }
 			dlt_beta -= (float) mdltx / 3;
 		}
 		//
@@ -4025,9 +4039,23 @@ void main ()
 					dlt_nav_beta -= 1.5;
 					status ("PITCH - L", 25);
 				}
-				if (c==72)
+				if (c==72) {
 					lifter = -100;
-				
+				}
+                if (c==80) { // Down arrow - change space mouselook mode
+                    if (space_mouselook == 0) {
+                        space_mouselook = 1;
+                        status("MOUSELOOK ENABLED", 50);
+                    }
+                    else if (space_mouselook == 1) {
+                        space_mouselook = 2;
+                        status("INVERTED Y AXIS", 50);
+                    }
+                    else {
+                        space_mouselook = 0;
+                        status("MOUSELOOK DISABLED", 50);
+                    }
+                }
 			}
 			else {
 				goesk_a_reentry:
@@ -4392,6 +4420,7 @@ void ShowAboutPage(char surface) {
 		wrouthud (14, 59, NULL, "F3 - MOVIEMAKER");
 		wrouthud (14, 65, NULL, "TAB - TOGGLE ANTIALIASING");
 		wrouthud (14, 71, NULL, "S - TOGGLE ROOFSPEED");
+        wrouthud (14, 77, NULL, "DOWN ARROW - TOGGLE MOUSELOOK");
 	}
 	areaclear (adapted, 11, 178, 310, 188, 0, 0, 72);
 	if (charge<0) {
