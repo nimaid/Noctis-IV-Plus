@@ -28,6 +28,8 @@ noctis.exe
 
 ## Compiling
 
+*For a more detailed guide, [click here](source/README.md).*
+
 To compile Noctis IV Plus, follow these steps:
 
 1. Get a working MS-DOS setup, as per the above.
