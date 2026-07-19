@@ -33,10 +33,5 @@ noctis.exe
 To compile Noctis IV Plus, follow these steps:
 
 1. Get a working MS-DOS setup, as per the above.
-2. Install Borland C++ 3.1 for DOS to `c:\bc.31`
-3. Run the following from within the MS-DOS environment:
-```batch
-cd <directory where NIVPlus is installed>
-cd source
-compile.bat
-```
+2. Install [Borland C++ 3.1 for DOS](https://archive.org/download/bcpp31/BCPP31.ZIP) to `Noctis-IV-Plus\bc.31`
+3. Double-click `source\Build.bat` to run the build script.

@@ -1,8 +1,8 @@
 @echo off
 
 rem Change this to point to the installation directory for Borland C++ 3.1
-rem This should be relative to the DOS C: drive, not your main C: drive
-set BCPP31_DIR=C:\bc.31
+rem The N: drive is the Noctis-IV-Plus folder
+set BCPP31_DIR=N:\bc.31
 
 
 
