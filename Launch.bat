@@ -71,4 +71,4 @@ if not exist "%MOUNT_DIR%\modules\NOCTIS.EXE" (
 
 
 
-"%DOSBOX_X_BIN%" -c "mount c '%MOUNT_DIR%'" -c "c:" -c "cd modules" -c "NOCTIS.EXE" -conf "%CONF_FILE%" -exit
+"%DOSBOX_X_BIN%" -c "mount n '%MOUNT_DIR%'" -c "n:" -c "cd modules" -c "NOCTIS.EXE" -conf "%CONF_FILE%" -exit
