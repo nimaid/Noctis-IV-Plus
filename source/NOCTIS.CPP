@@ -4045,15 +4045,15 @@ void main ()
                 if (c==80) { // Down arrow - change space mouselook mode
                     if (space_mouselook == 0) {
                         space_mouselook = 1;
-                        status("MOUSELOOK ENABLED", 50);
+                        status("MOUSELOOK ON", 50);
                     }
                     else if (space_mouselook == 1) {
                         space_mouselook = 2;
-                        status("INVERTED Y AXIS", 50);
+                        status("INV. Y AXIS", 50);
                     }
                     else {
                         space_mouselook = 0;
-                        status("MOUSELOOK DISABLED", 50);
+                        status("MOUSELOOK OFF", 50);
                     }
                 }
 			}
