@@ -73,4 +73,6 @@ if not exist "%BCPP31_DIR%\BIN\MAKE.EXE" (
     exit /b
 )
 
+
+
 "%DOSBOX_X_BIN%" -c "mount n '%MOUNT_DIR%'" -c "n:" -c "cd source" -c "compile.bat" -exit
