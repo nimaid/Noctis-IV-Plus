@@ -11,6 +11,7 @@ popd
 set DBX_BIN_INSTALLED=C:\DOSBox-X\dosbox-x.exe
 set DBX_BIN_PORTABLE=%NIVP_DIR%\bin\x64\Release\dosbox-x.exe
 
+set CONF_FILE=%NIVP_DIR%\dosbox.conf
 set MOUNT_DIR=%NIVP_DIR%
 
 set BCPP31_DIR=%MOUNT_DIR%\bc.31
@@ -51,6 +52,19 @@ if "%PORTABLE%"=="1" (
     echo Using installed binary: "%DOSBOX_X_BIN%"
 )
 
+if exist "%CONF_FILE%" (
+    echo Using conf file: "%CONF_FILE%"
+) else (
+    echo Could not find conf file: "%CONF_FILE%"
+    echo.
+    echo ERROR: Configuration file not found! Unable to launch!
+    echo Download here: https://github.com/jorisvddonk/Noctis-IV-Plus/raw/refs/heads/master/dosbox.conf
+    echo.
+    <nul set /p "=Press any key to exit . . . "
+    pause >nul
+    exit /b
+)
+
 if not exist "%MOUNT_DIR%\source\compile.bat" (
     echo.
     echo ERROR: Noctis IV / IV Plus not found! Unable to launch!
@@ -75,4 +89,4 @@ if not exist "%BCPP31_DIR%\BIN\MAKE.EXE" (
 
 
 
-"%DOSBOX_X_BIN%" -c "mount n '%MOUNT_DIR%'" -c "n:" -c "cd source" -c "compile.bat" -exit
+"%DOSBOX_X_BIN%" -c "mount n '%MOUNT_DIR%'" -c "n:" -c "cd source" -c "compile.bat" -conf "%CONF_FILE%" -exit
