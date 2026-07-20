@@ -4528,7 +4528,7 @@ void planetary_main ()
 			}
 			waveblur--;
 		}
-		else {
+		else if (option_antialias) {
 			QUADWORDS = 160 + openhudcount * 80;
 			psmooth_64 (adapted, 160);
 			psmooth_64 (adapted, 160);
@@ -4975,6 +4975,14 @@ void planetary_main ()
 						_close (sfh);
 						exitflag = 1;
 						goto nodissolve;
+					}
+				}
+                
+                if (w == 9) { // TAB - antialiasing on/off
+					if (option_antialias == 0) {
+						option_antialias = 1;
+					} else {
+						option_antialias = 0;
 					}
 				}
 			}

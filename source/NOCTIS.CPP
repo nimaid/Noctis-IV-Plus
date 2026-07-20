@@ -459,7 +459,7 @@ void freeze ()
 	WRITEFILE (fh, &lastSnapshot, sizeof(lastSnapshot));				//36
 	WRITEFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 	WRITEFILE (fh, &roofspeed, sizeof(roofspeed));
-	WRITEFILE (fh, &option_antialias_in_stardrifter, sizeof(option_antialias_in_stardrifter));
+	WRITEFILE (fh, &option_antialias, sizeof(option_antialias));
 	_close (fh);
 }
 
@@ -1990,7 +1990,7 @@ void unfreeze ()
 		READFILE (fh, &lastSnapshot, sizeof(lastSnapshot));				//36
 		READFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 		READFILE (fh, &roofspeed, sizeof(roofspeed));
-		READFILE (fh, &option_antialias_in_stardrifter, sizeof(option_antialias_in_stardrifter));
+		READFILE (fh, &option_antialias, sizeof(option_antialias));
 		strcpy(fcs_status_extended, fcs_status_extended);
 		_close (fh);
 	}
@@ -2946,7 +2946,7 @@ void main ()
 		// straordinariamente belli su uno schermo che, di per s�,
 		// � poco risolutivo, sia fisicamente che cromaticamente.
 		//
-		if (option_antialias_in_stardrifter){
+		if (option_antialias){
 			QUADWORDS -= 240;
 			psmooth_64 (adapted, 200);
 			psmooth_64 (adapted, 200);
@@ -4393,10 +4393,10 @@ void main ()
 				//if (c=='+' && surlight < 63) surlight++;
 				//if (c=='-' && surlight > 10) surlight--;
 				if (c==9) {								// TAB - antialiasing on/off
-					if (option_antialias_in_stardrifter == 0) {
-						option_antialias_in_stardrifter = 1;
+					if (option_antialias == 0) {
+						option_antialias = 1;
 					} else {
-						option_antialias_in_stardrifter = 0;
+						option_antialias = 0;
 					}
 				}
 			}
@@ -4435,6 +4435,7 @@ void ShowAboutPage(char surface) {
 		wrouthud (14,77, NULL,   "B OR DELETE - RAW SNAPSHOT                  V OR + - RAW WIDE SNAPSHOT");
 		wrouthud (14,83, NULL,   "F3 - MOVIEMAKER                             F2 - TOGGLE HUD");
 		wrouthud (14,89, NULL,   "DOWN ARROW - TOGGLE MOUSELOOK");
+        wrouthud (14,95, NULL,   "TAB - TOGGLE ANTIALIASING");
 	} else {
 		wrouthud (14, 37, NULL, "SHORTCUT KEYS (WHEN IN SPACE):");
 		wrouthud (14, 53, NULL, "M OR ASTERISK - SNAPSHOT                     B - RAW SNAPSHOT");
