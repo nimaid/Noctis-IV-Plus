@@ -3717,6 +3717,7 @@ void planetary_main ()
 	long	prog;
 	long	line;
 	extern char about;
+    extern char draw_hud;
 
 	exitflag = 0;
 
@@ -4511,7 +4512,7 @@ void planetary_main ()
 		// subito dopo che si � stati bagnati da un'onda...
 	  ends: 
 	  	// trying to have status on surface working (neuzd)
-	  	if (fcs_status_delay>0) {
+	  	if (fcs_status_delay>0 && draw_hud == 1) {
 			int len = strlen(fcs_status_extended);
 			len = len+len;
 			wrouthud(160-len, 100, NULL, fcs_status_extended);
@@ -4543,7 +4544,14 @@ void planetary_main ()
 		}
 		
 		// il fotogramma � finito. ora lo visualizza.
-		surrounding (1, openhudcount);
+        if (draw_hud != -1) {
+            if (draw_hud == 1) {
+                surrounding (1, openhudcount);
+            }
+            else {
+                surrounding (0, openhudcount);
+            }
+        }
 		QUADWORDS = 16000;
 		if (!widesnapping) pcopy (adaptor, adapted);
 		QUADWORDS = pqw;
@@ -4734,23 +4742,40 @@ void planetary_main ()
 				}
 				
 				if (w==0x3D){								// f3 - moviestat
-					if (moviestat == 0){
-						moviestat = 1;
-						about = 0;
-					}
-					else {
-						moviestat = 0;
-					}
+					if (draw_hud == 1) {
+                        if (moviestat == 0){
+                            moviestat = 1;
+                            about = 0;
+                        }
+                        else {
+                            moviestat = 0;
+                        }
+                    }
 				}
 				if (w==0x3B) { // F1 - help & about
 					if (about == 0){
 						about = 1;
 						moviestat = 0;
+                        draw_hud = 1;
 					}
 					else {
 						about = 0;
 					}
 				}
+                if (w==0x3C) { // F2 - HUD toggle
+                    if (about == 0) {
+                        if (draw_hud == 1) {
+                            draw_hud = 0;
+                            moviestat = 0;
+                        }
+                        else if (draw_hud == 0) {
+                            draw_hud = -1;
+                        }
+                        else {
+                            draw_hud = 1;
+                        }
+                    }
+                }
 				if (w == 0x50){ // Down arrow - change space mouselook mode
 					//user_alfa = user_alfa - 1;
 					option_mouseLook++;
