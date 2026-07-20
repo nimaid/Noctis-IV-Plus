@@ -4410,7 +4410,7 @@ void ShowAboutPage(char surface) {
 		wrouthud (14,71, NULL,   "M OR ASTERISK - SNAPSHOT                    N OR / - WIDE SNAPSHOT");
 		wrouthud (14,77, NULL,   "B OR DELETE - RAW SNAPSHOT");
 		wrouthud (14,83, NULL,   "F3 - MOVIEMAKER");
-		wrouthud (14,89, NULL,  "UP ARROW - TOGGLE MOUSELOOK");
+		wrouthud (14,89, NULL,  "DOWN ARROW - TOGGLE MOUSELOOK");
 	} else {
 		wrouthud (14, 37, NULL, "SHORTCUT KEYS (WHEN IN SPACE):");
 		wrouthud (14, 53, NULL, "M OR ASTERISK - SNAPSHOT                     B - RAW SNAPSHOT");

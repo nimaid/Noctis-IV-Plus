@@ -4751,7 +4751,7 @@ void planetary_main ()
 						about = 0;
 					}
 				}
-				if (w == 0x48){
+				if (w == 0x50){ // Down arrow - change space mouselook mode
 					//user_alfa = user_alfa - 1;
 					option_mouseLook++;
 					if (option_mouseLook>2) option_mouseLook=0;
