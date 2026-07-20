@@ -1188,6 +1188,9 @@ int moviepaused=0;
 
 char about = 0;
 
+// Variables for HUD toggle (nimaid)
+char draw_hud = 1;
+
 unsigned char far * ctrlkeys     = (unsigned char far *) 0x00000417;
 
 char   aso_countdown = 100;	// contatore per la funzione "autoscreenoff"
@@ -2787,7 +2790,7 @@ void main ()
 		// Fornisce informazioni sullo strato esterno dell'H.U.D.
 		// Qualsiasi glifo verr� in seguito trattato con dithering.
 		//
-		if (active_screen != -1) goto nohud_1;
+		if (active_screen != -1 || draw_hud != 1) goto nohud_1;
 		//
 		// Informazioni e schemi addizionali sull'H.U.D.
 		// Tracciamento label della stella selezionata.
@@ -2867,12 +2870,14 @@ void main ()
 		//
        nohud_1: alfa = 0; beta = 0; change_angle_of_view ();
 		cam_x = -512; cam_y = -275; cam_z = -750;
-		c = strlen(fcs_status_extended) - 1;
-		while (c >= 0) {
-			digit_at (fcs_status_extended[c], -6, -15, 6, 120, 1);
-			cam_x += 45;
-			c--;
-		}
+        if (draw_hud == 1) {
+            c = strlen(fcs_status_extended) - 1;
+            while (c >= 0) {
+                digit_at (fcs_status_extended[c], -6, -15, 6, 120, 1);
+                cam_x += 45;
+                c--;
+            }
+        }
 		//
 		// Link alla funzione di ricerca dei targets in real-time.
 		//
@@ -3528,7 +3533,9 @@ void main ()
 		// disegna i bordi dello scafandro, illuminati in relazione
 		// all'ambiente circostante.
 		//
-		surrounding (0, 180);
+        if (draw_hud != -1) {
+            surrounding (0, 180);
+        }
 		// riduzione stanchezza (continua, eventualmente
 		// dall'ultima volta che si � scesi in superficie)
 		// e variazioni nelle pulsazioni, pi� verosimili...
@@ -3897,44 +3904,61 @@ void main ()
 					if (about == 0){
 						about = 1;
 						moviestat = 0;
+                        draw_hud = 1;
 					}
 					else {
 						about = 0;
 					}
 				}
-				if (c==0x3D){								// f3 - moviestat
-					if (moviestat == 0){
-						moviestat = 1;
-						
-						char tempsnapfile[24];
-						if (movieexists == 0)
-						{								//let's check if the moviedeck exists already.... But only if the moviedeck has been changed lately.
-							//wrouthud (10,90, NULL, "CHECKING!!!");
-							sprintf (tempsnapfile, "..\\MOVIES\\%03i\\00000001.BMP", moviedeck);
-							FILE * tmpFile = fopen(tempsnapfile, "r");
-							if (tmpFile == NULL) {
-								movieexists = 1;
-							} else {
-								movieexists = 2;
-							}
-							fclose(tmpFile);
-						}
-						char  short_text[11];
-						if (movieexists == 2)
-						{
-							sprintf (short_text, "%i EXISTS", moviedeck);
-							status(short_text,100);
-						}
-						else
-						{
-							sprintf (short_text, "MD %i FREE", moviedeck);
-							status(short_text,100);
-						}
-					}
-					else {
-						moviestat = 0;
-						status("MVMENU OFF",100);
-					}
+                if (c==0x3C) { // F2 - HUD toggle
+                    if (about == 0) {
+                        if (draw_hud == 1) {
+                            draw_hud = 0;
+                            moviestat = 0;
+                        }
+                        else if (draw_hud == 0) {
+                            draw_hud = -1;
+                        }
+                        else {
+                            draw_hud = 1;
+                        }
+                    }
+                }
+				if (c==0x3D){ // f3 - moviestat
+					if (draw_hud == 1) {
+                        if (moviestat == 0){
+                            moviestat = 1;
+                            
+                            char tempsnapfile[24];
+                            if (movieexists == 0)
+                            {								//let's check if the moviedeck exists already.... But only if the moviedeck has been changed lately.
+                                //wrouthud (10,90, NULL, "CHECKING!!!");
+                                sprintf (tempsnapfile, "..\\MOVIES\\%03i\\00000001.BMP", moviedeck);
+                                FILE * tmpFile = fopen(tempsnapfile, "r");
+                                if (tmpFile == NULL) {
+                                    movieexists = 1;
+                                } else {
+                                    movieexists = 2;
+                                }
+                                fclose(tmpFile);
+                            }
+                            char  short_text[11];
+                            if (movieexists == 2)
+                            {
+                                sprintf (short_text, "%i EXISTS", moviedeck);
+                                status(short_text,100);
+                            }
+                            else
+                            {
+                                sprintf (short_text, "MD %i FREE", moviedeck);
+                                status(short_text,100);
+                            }
+                        }
+                        else {
+                            moviestat = 0;
+                            status("MVMENU OFF",100);
+                        }
+                    }
 				}
 				if (c==144 && moviestat && !movie) {					//add 1 to moviedeck
 					if (moviedeck < 999) {
@@ -4384,12 +4408,11 @@ void ShowAboutPage(char surface) {
 		wrouthud (14,65, NULL,   "SPACE - JETPACK                             C - DISENGAGE JETPACK CONTROL");
 		wrouthud (14,71, NULL,   "M OR ASTERISK - SNAPSHOT                    N OR / - WIDE SNAPSHOT");
 		wrouthud (14,77, NULL,   "B OR DELETE - RAW SNAPSHOT");
-		wrouthud (14,83, NULL,   "F3 - MOVIEMAKER");
-		wrouthud (14,89, NULL,  "UP ARROW - TOGGLE MOUSELOOK");
+		wrouthud (14,83, NULL,   "F3 - MOVIEMAKER                             F2 - TOGGLE HUD");
 	} else {
 		wrouthud (14, 37, NULL, "SHORTCUT KEYS (WHEN IN SPACE):");
 		wrouthud (14, 53, NULL, "M OR ASTERISK - SNAPSHOT                     B - RAW SNAPSHOT");
-		wrouthud (14, 59, NULL, "F3 - MOVIEMAKER");
+		wrouthud (14, 59, NULL, "F3 - MOVIEMAKER                              F2 - TOGGLE HUD");
 		wrouthud (14, 65, NULL, "TAB - TOGGLE ANTIALIASING");
 		wrouthud (14, 71, NULL, "S - TOGGLE ROOFSPEED");
 	}
