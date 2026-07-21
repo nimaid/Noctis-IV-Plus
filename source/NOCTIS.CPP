@@ -2097,7 +2097,7 @@ void main ()
 	char *planetd[] = { "INTERNALLY HOT",
 				   "CRATERIZED NO ATMOSPHERE",
 				   "THICK ATMOSPHERE",
-				   "FELISIAN",
+				   "FELYSIAN",
 				   "CREASED NO ATMOSPHERE",
 				   "THIN ATMOSPHERE",
 				   "LARGE NOT CONSISTENT",
