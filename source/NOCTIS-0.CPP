@@ -6152,7 +6152,7 @@ void surrounding (char compass_on, int openhudcount)
 	long	lsecs, lptr;
 	float	pp_delta, ccom;
 
-	if (draw_hud == 1) {
+	if ((draw_hud == 1) && (option_antialias_in_stardrifter == 1)) {
         for (lptr=0; lptr<04; lptr++) areaclear (adapted, 10, openhudcount + 9 - lptr, 0, 0, 300, 1, 54 + surlight + 3*lptr);
     }
 	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 0, 9 - lptr, 0, 0, 320, 1, 64 + surlight - lptr);
