@@ -3955,13 +3955,13 @@ void main ()
                     }
                 }
                 if (c == 0x49) {
-					openhuddelta = -5;
-					hud_closed = 0;
-                    //option_antialias_in_stardrifter = 0;
+					//openhuddelta = -5;
+					//hud_closed = 0;
+                    option_antialias_in_stardrifter = 0;
 				}
 				if (c == 0x51) {
-					openhuddelta = +5;
-                    //option_antialias_in_stardrifter = 1;
+					//openhuddelta = +5;
+                    option_antialias_in_stardrifter = 1;
                 }
 				if (c==0x3D){ // f3 - moviestat
 					if (draw_hud == 1) {
