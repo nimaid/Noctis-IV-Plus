@@ -4716,12 +4716,12 @@ void planetary_main ()
 				moviedeck++;
 				movieexists=0;
 				movie_paused = 0;
-			}	
+			}
 		}
 		// controllo tastiera.
-		while (tasto_premuto()) {
+		while (tasto_premuto()) { // Surface controls
 			w = attendi_pressione_tasto();
-			if (!w) {
+			if (!w) { // Extended keycodes
 				w = attendi_pressione_tasto();
 				if (w == 0x49) {
 					openhuddelta = -5;
@@ -4818,7 +4818,7 @@ void planetary_main ()
 					pri_z = +dsd2 * sin(beta) * cos(alfa);
 				}*/
 			}
-			else {
+			else { // Regular (non-extended) keycodes
 				//if (w=='+' && surlight < 63) surlight++;
 				//if (w=='-' && surlight > 10) surlight--;
 				if (w=='+' && surlight < 63 && !moviestat) surlight++;

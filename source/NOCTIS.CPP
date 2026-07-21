@@ -3889,9 +3889,9 @@ void main ()
 			goto goesk_a_reentry;
 		}
 		if (active_screen == -1 && tasto_premuto()) {
-		 while (tasto_premuto()) {
+		 while (tasto_premuto()) { // Space controls
 			c = attendi_pressione_tasto();
-			if (!c) {
+			if (!c) { // Extended keycodes
 				c = attendi_pressione_tasto();
 				if (c==0x3B) { // F1 - help & about
 					if (about == 0){
@@ -4029,7 +4029,7 @@ void main ()
 					lifter = -100;
 				
 			}
-			else {
+			else { // Regular (non-extended) keycodes
 				goesk_a_reentry:
 				if (c=='*' || c=='m' && !(labstar || labplanet) ) {
 					snapshot (0, 1);
