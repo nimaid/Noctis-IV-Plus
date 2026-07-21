@@ -810,7 +810,7 @@ Word old_currentbin_length = 245;
 //Additional variables: (SL and Mega)
 Dword lastSnapshot = -1;				//0
 char option_mouseLook = 0;			//4
-char option_antialias = 1;
+char option_antialias_in_stardrifter = 1;
 
 Word new_currentbin_length = 5;
 char 	fcs_status_extended[42] = "STANDBY";
