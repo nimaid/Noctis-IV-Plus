@@ -2884,7 +2884,7 @@ void main ()
         if (draw_hud == 1) {
             c = strlen(fcs_status_extended) - 1;
             while (c >= 0) {
-                digit_at (fcs_status_extended[c], -6, -15, 6, 120, 1);
+                digit_at (fcs_status_extended[c], -6, -25, 6, 120, 1);
                 cam_x += 45;
                 c--;
             }
