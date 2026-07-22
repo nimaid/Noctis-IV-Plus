@@ -3651,7 +3651,9 @@ void lens_flares_for (double cam_x, double cam_y, double cam_z,
 	unsigned char temp;
 
 	int c, r;
-
+    
+    char on_hud_forced = (((on_hud == 1) && (lens_flare_mode == 0)) || (lens_flare_mode == 1));
+    
 	setfx (1);
 
 	xx = xlight - cam_x;
@@ -3683,7 +3685,7 @@ void lens_flares_for (double cam_x, double cam_y, double cam_z,
 				dx = lft_cos[c] * k * l;
 				dy = lft_sin[c] * k * l;
 				fline (xs-dx, ys-dy, xs+dx, ys+dy);
-				if (on_hud && !(c%8)) {
+				if (on_hud_forced && !(c%8)) {
 					dx /= 10; dy /= 10;
 					xr = (float)xs * -0.1;
 					yr = (float)ys * -0.1;
