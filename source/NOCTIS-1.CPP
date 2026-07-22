@@ -3342,6 +3342,7 @@ void planetary_main ()
 	int	 openhuddelta = 0;
 	char	 hud_closed   = 1;
 	char	 widesnapping = 0;
+    char     raw_widesnap = 0;
 
 	int 	 w, lw = 10, now = 25, waveratio = 5, waveblur = 0;
 	int      flick, flicks, fshift;
@@ -4608,7 +4609,12 @@ void planetary_main ()
 				dzat_x = backup_dzat_x;
 				dzat_y = backup_dzat_y;
 				dzat_z = backup_dzat_z;
-				snapshot (9997+widesnapping, 1);
+                if (raw_widesnap == 1) {
+                    snapshot (9997+widesnapping, 0);
+                }
+                else {
+                    snapshot (9997+widesnapping, 1);
+                }
 				dzat_x = 0;
 				dzat_y = 0;
 				dzat_z = 0;
@@ -4760,18 +4766,7 @@ void planetary_main ()
 						about = 0;
 					}
 				}
-                if (w==0x3C) { // F2 - HUD toggle
-                    if (about == 0) {
-                        if (draw_hud == 1) {
-                            draw_hud = 0;
-                            moviestat = 0;
-                        }
-                        else {
-                            draw_hud = 1;
-                        }
-                    }
-                }
-				if (w == 0x48){
+				if (w == 0x50){ // Down arrow - change surface mouselook mode
 					//user_alfa = user_alfa - 1;
 					option_mouseLook++;
 					if (option_mouseLook>2) option_mouseLook=0;
@@ -4880,7 +4875,13 @@ void planetary_main ()
 				if ((w == '/' || w == 'n') && !widesnapping) {
 					snapshot (9997, 0);
 					widesnapping = 1;
+                    raw_widesnap = 0;
 				}
+                if ((w == 'v' || w == '+') && !widesnapping) {
+                    snapshot (9997, 0);
+					widesnapping = 1;
+                    raw_widesnap = 1;
+                }
 				if (w >= 48 && w <= 57) {
 					w = w - 48;
 					if (fixed_step == (w * 10))

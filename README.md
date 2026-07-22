@@ -12,14 +12,22 @@ For the manual, see [manual/noctis_iv_manual.html](manual/noctis_iv_manual.html)
 
 Noctis IV was made for MS-DOS and early Windows versions that still supported 16-bit MS-DOS executables natively, and as such, you'll need to be able to run DOS on your computer. To run Noctis IV plus on modern computers, you have three main options, in order of simplest to most complicated to setup:
 
-1. [DosBOS-X](https://dosbox-x.com/) (all modern operating systems)
+1. [DOSBox-X](https://dosbox-x.com/) (all modern operating systems)
 2. [DOSEMU](http://www.dosemu.org/) (Linux only)
 3. A [FreeDOS](https://www.freedos.org/) or MS-DOS environment running inside of a virtual machine like [VirtualBox](https://www.virtualbox.org/)
 
-The author of Noctis IV Plus recommends DosBOS-X, using the "dynamic_x86" CPU core, simulating a Pentium III 866MHz EB (~407000 cycles). Note that with this setup, a completely empty Stardrifter floating in space may actually give you *lower* frames per second than one that's orbiting a planet in a star system. You may want to play around with the cycle count a bit to find the right number for your computer.
+### DOSBox-X (recommended)
 
-Once you've got an MS-DOS setup running, simply run the following from within the MS-DOS environment:
+The `Launch.bat` script lets you run Noctis IV Plus with a simple double-click on Windows systems. It expects DOSBox-X to either be installed in it's default location `C:\DOSBox-X\dosbox-x.exe`, or installed portably with it's `bin` folder placed in the main `Noctis-IV-Plus` folder.
 
+If you are using a system other than Windows, simply run the following command:
+```
+dosbox-x -c "mount n '<directory where NIVPlus is installed>'" -c "n:" -c "cd modules" -c "NOCTIS.EXE" -conf dosbox.conf -exit
+```
+
+### Other DOS Emulators
+
+Run the following commands in your DOS environment:
 ```batch
 cd <directory where NIVPlus is installed>
 cd modules
@@ -28,13 +36,10 @@ noctis.exe
 
 ## Compiling
 
+*For a more detailed guide, [click here](source/README.md).*
+
 To compile Noctis IV Plus, follow these steps:
 
 1. Get a working MS-DOS setup, as per the above.
-2. Install Borland C++ 3.1 for DOS to `c:\bc.31`
-3. Run the following from within the MS-DOS environment:
-```batch
-cd <directory where NIVPlus is installed>
-cd source
-compile.bat
-```
+2. Install [Borland C++ 3.1 for DOS](https://archive.org/download/bcpp31/BCPP31.ZIP) to `Noctis-IV-Plus\bc.31`
+3. Double-click `source\Build.bat` to run the build script.
