@@ -6109,26 +6109,33 @@ float	tp_temp = 22, pp_temp = 22;
 float	tp_pressure = 1, pp_pressure = 1;
 float	tp_pulse = 118, pp_pulse = 118;
 
+// Variables for HUD toggle (nimaid)
+extern char draw_hud;
+extern char about;
+char taking_snapshot = 0;
+
 void wrouthud (unsigned x, unsigned y, unsigned l, char *text)
 {
-	int j, i, n;
-	unsigned spot;
+    if (draw_hud == 1 || about == 1 || taking_snapshot == 1) {
+        int j, i, n;
+        unsigned spot;
 
-	n = 0; if (!l) l = 32767;
-	spot = y * 320 + x;
+        n = 0; if (!l) l = 32767;
+        spot = y * 320 + x;
 
-	while (text[n] && n < l) {
-		j = (text[n] - 32) * 5;
-		for (i = 0; i < 5; i++) {
-			if (digimap[j + i] & 1) adapted[spot+0] = 191 - adapted[spot+0];
-			if (digimap[j + i] & 2) adapted[spot+1] = 191 - adapted[spot+1];
-			if (digimap[j + i] & 4) adapted[spot+2] = 191 - adapted[spot+2];
-			spot += 320;
-		}
-		spot -= 320 * 5;
-		spot += 4;
-		n++;
-	}
+        while (text[n] && n < l) {
+            j = (text[n] - 32) * 5;
+            for (i = 0; i < 5; i++) {
+                if (digimap[j + i] & 1) adapted[spot+0] = 191 - adapted[spot+0];
+                if (digimap[j + i] & 2) adapted[spot+1] = 191 - adapted[spot+1];
+                if (digimap[j + i] & 4) adapted[spot+2] = 191 - adapted[spot+2];
+                spot += 320;
+            }
+            spot -= 320 * 5;
+            spot += 4;
+            n++;
+        }
+    }
 }
 
 char blinkhudlights;
@@ -6145,7 +6152,9 @@ void surrounding (char compass_on, int openhudcount)
 	long	lsecs, lptr;
 	float	pp_delta, ccom;
 
-	for (lptr=0; lptr<04; lptr++) areaclear (adapted, 10, openhudcount + 9 - lptr, 0, 0, 300, 1, 54 + surlight + 3*lptr);
+	if (draw_hud == 1) {
+        for (lptr=0; lptr<04; lptr++) areaclear (adapted, 10, openhudcount + 9 - lptr, 0, 0, 300, 1, 54 + surlight + 3*lptr);
+    }
 	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 0, 9 - lptr, 0, 0, 320, 1, 64 + surlight - lptr);
 	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 0, 190 + lptr, 0, 0, 320, 1, 64 + surlight - lptr);
 	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 9 - lptr, 10 - (lptr + 1), 0, 0, 1, 180 + 20 - ((9 - lptr) * 2), 64 + surlight - lptr);
@@ -6156,6 +6165,7 @@ void surrounding (char compass_on, int openhudcount)
 
 //Turn on (and make a bit larger) those lights. Blinkhudlights turns them on, and Blinkhudlights_stay
 //makes them either turn off again, or stay on until Blinkhudlights is set to 0 again.
+    if (draw_hud == 0) goto no_hud_lights;
 	if (blinkhudlights == 1) {
 		if (lptr <= 111)
 		lptr = 127;
@@ -6192,6 +6202,7 @@ void surrounding (char compass_on, int openhudcount)
 		areaclear (adapted, 308, 188, 0, 0, 4, 4, lptr);
 		smootharound_64 (adapted, 308, 188, 5, 1);
 	}
+    no_hud_lights:
 
 	sprintf (outhudbuffer, "EPOC %d & ", epoc);
 	lsecs = secs; lsecs -= lsecs % 1000000L; lsecs /= 1000000L; lsecs%=1000;
@@ -6272,12 +6283,14 @@ int movieexists;
 char snapfilename[24];
 void snapshot (int forcenumber, char showdata)
 {
-    	long prog;
+    long prog;
 	unsigned pqw;
 	double parsis_x, parsis_y, parsis_z;
 
 	unsigned ptr, c;
 	char a, b, t[54];
+    
+    taking_snapshot = 1;
 
 	int ih = sa_open (header_bmp);
 	if (ih==-1) return;
@@ -6334,47 +6347,59 @@ void snapshot (int forcenumber, char showdata)
 		sprintf (snapfilename, "..\\GALLERY\\WIDE%04d.BMP", forcenumber);	//Panoramic snapshots no longer overwrite pictures 9997-9999 if those happened to exist. (SL)
 
     if (showdata) {
-	areaclear (adapted, 2, 191, 0, 0, 316, 7, 64 + 63);
+        areaclear (adapted, 2, 191, 0, 0, 316, 7, 64 + 63);
 
-	asm {	fld dzat_x
-		frndint
-		fstp parsis_x
-		fld dzat_y
-		frndint
-		fstp parsis_y
-		fld dzat_z
-		frndint
-		fstp parsis_z }
+        asm {	fld dzat_x
+            frndint
+            fstp parsis_x
+            fld dzat_y
+            frndint
+            fstp parsis_y
+            fld dzat_z
+            frndint
+            fstp parsis_z }
 
-	strcpy (outhudbuffer, "LOCATION PARSIS: ");
-	strcat (outhudbuffer, alphavalue(parsis_x));
-	strcat (outhudbuffer, ";");
-	strcat (outhudbuffer, alphavalue(-parsis_y));
-	strcat (outhudbuffer, ";");
-	strcat (outhudbuffer, alphavalue(parsis_z));
-	if (ip_targetted > -1) {
-		if (nearstar_p_owner[ip_targetted] > -1) {
-			strcat (outhudbuffer, " & TGT: MOON N@");
-			strcat (outhudbuffer, alphavalue(nearstar_p_moonid[ip_targetted]+1));
-			strcat (outhudbuffer, " OF PLANET N@");
-			strcat (outhudbuffer, alphavalue(nearstar_p_owner[ip_targetted]+1));
-		}
-		else {
-			strcat (outhudbuffer, " & TGT: PLANET N@");
-			strcat (outhudbuffer, alphavalue(ip_targetted+1));
-		}
-	}
-	wrouthud (3, 192, NULL, outhudbuffer);
+        strcpy (outhudbuffer, "LOCATION PARSIS: ");
+        strcat (outhudbuffer, alphavalue(parsis_x));
+        strcat (outhudbuffer, ";");
+        strcat (outhudbuffer, alphavalue(-parsis_y));
+        strcat (outhudbuffer, ";");
+        strcat (outhudbuffer, alphavalue(parsis_z));
+        if (ip_targetted > -1) {
+            if (nearstar_p_owner[ip_targetted] > -1) {
+                strcat (outhudbuffer, " & TGT: MOON N@");
+                strcat (outhudbuffer, alphavalue(nearstar_p_moonid[ip_targetted]+1));
+                strcat (outhudbuffer, " OF PLANET N@");
+                strcat (outhudbuffer, alphavalue(nearstar_p_owner[ip_targetted]+1));
+            }
+            else {
+                strcat (outhudbuffer, " & TGT: PLANET N@");
+                strcat (outhudbuffer, alphavalue(ip_targetted+1));
+            }
+        }
+        wrouthud (3, 192, NULL, outhudbuffer);
 
-	if (ap_targetted == 1 && star_label_pos != -1) {
-		areaclear (adapted, 14, 14, 0, 0, 102, 7, 64 + 63);
-		wrouthud (15, 15, 20, star_label);
-	}
+        if (ap_targetted == 1 && star_label_pos != -1) {
+            if (draw_hud == 1) {
+                areaclear (adapted, 14, 14, 0, 0, 102, 7, 64 + 63);
+                wrouthud (15, 15, 20, star_label);
+            }
+            else {
+                areaclear (adapted, 2, 2, 0, 0, 102, 7, 64 + 63);
+                wrouthud (3, 3, 20, star_label);
+            }
+        }
 
-	if (ip_targetted != -1 && planet_label_pos != -1) {
-		areaclear (adapted, 14, 23, 0, 0, 102, 7, 64 + 63);
-		wrouthud (15, 24, 20, planet_label);
-	}
+        if (ip_targetted != -1 && planet_label_pos != -1) {
+            if (draw_hud == 1) {
+                areaclear (adapted, 14, 23, 0, 0, 102, 7, 64 + 63);
+                wrouthud (15, 24, 20, planet_label);
+            }
+            else {
+                areaclear (adapted, 2, 11, 0, 0, 102, 7, 64 + 63);
+                wrouthud (3, 12, 20, planet_label);
+            }
+        }
     }
 
 	ih = _creat (snapfilename, 0);
@@ -6390,6 +6415,8 @@ void snapshot (int forcenumber, char showdata)
 		for (ptr=63680; ptr<64000; ptr-=320) _write (ih, adapted+ptr, 320);
 		_close (ih);
 	}
+    
+    taking_snapshot = 0;
 }
 
 /*
