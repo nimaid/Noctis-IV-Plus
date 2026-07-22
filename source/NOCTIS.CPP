@@ -459,8 +459,6 @@ void freeze ()
 	WRITEFILE (fh, &lastSnapshot, sizeof(lastSnapshot));				//36
 	WRITEFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 	WRITEFILE (fh, &roofspeed, sizeof(roofspeed));
-	WRITEFILE (fh, &openhudcount, sizeof(openhudcount));
-	WRITEFILE (fh, &openhuddelta, sizeof(openhuddelta));
 	WRITEFILE (fh, &hud_closed, sizeof(hud_closed));
 	_close (fh);
 }
@@ -1996,11 +1994,15 @@ void unfreeze ()
 		READFILE (fh, &lastSnapshot, sizeof(lastSnapshot));				//36
 		READFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 		READFILE (fh, &roofspeed, sizeof(roofspeed));
-        READFILE (fh, &openhudcount, sizeof(openhudcount));
-        READFILE (fh, &openhuddelta, sizeof(openhuddelta));
         READFILE (fh, &hud_closed, sizeof(hud_closed));
 		strcpy(fcs_status_extended, fcs_status_extended);
 		_close (fh);
+        
+        if (hud_closed == 1) {
+            openhudcount = 180;
+        } else {
+            openhudcount = 0;
+        }
 	}
 	else
 		return;
