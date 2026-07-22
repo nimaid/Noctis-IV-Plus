@@ -4425,16 +4425,16 @@ void ShowAboutPage(char surface) {
 	if (surface) {
 		wrouthud (14, 37, NULL, "SURFACE SHORTCUT KEYS:");
 		wrouthud (14,53, NULL,  "0-9 - MOVEMENT SPEED");
-		wrouthud (14,59, NULL,   "J - JUMP                                    L - LAND ON SURFACE");
-		wrouthud (14,65, NULL,   "SPACE - JETPACK                             C - DISENGAGE JETPACK CONTROL");
-		wrouthud (14,71, NULL,   "M OR ASTERISK - SNAPSHOT                    N OR / - WIDE SNAPSHOT");
-		wrouthud (14,77, NULL,   "B OR DELETE - RAW SNAPSHOT");
-		wrouthud (14,83, NULL,   "F3 - MOVIEMAKER");
+		wrouthud (14,59, NULL,  "J - JUMP                                    L - LAND ON SURFACE");
+		wrouthud (14,65, NULL,  "SPACE - JETPACK                             C - DISENGAGE JETPACK CONTROL");
+		wrouthud (14,71, NULL,  "M OR ASTERISK - SNAPSHOT                    N OR / - WIDE SNAPSHOT");
+		wrouthud (14,77, NULL,  "B OR DELETE - RAW SNAPSHOT");
+		wrouthud (14,83, NULL,  "F3 - MOVIEMAKER");
         wrouthud (14,89, NULL,  "TAB - TOGGLE LENS FLARES");
 		wrouthud (14,95, NULL,  "UP ARROW - TOGGLE MOUSELOOK");
 	} else {
 		wrouthud (14, 37, NULL, "SHORTCUT KEYS (WHEN IN SPACE):");
-		wrouthud (14, 53, NULL, "M OR ASTERISK - SNAPSHOT                     B - RAW SNAPSHOT");
+		wrouthud (14, 53, NULL, "M OR ASTERISK - SNAPSHOT                    B - RAW SNAPSHOT");
 		wrouthud (14, 59, NULL, "F3 - MOVIEMAKER");
 		wrouthud (14, 65, NULL, "TAB - TOGGLE LENS FLARES");
 		wrouthud (14, 71, NULL, "S - TOGGLE ROOFSPEED");
