@@ -4744,8 +4744,8 @@ void planetary_main ()
 				if (w == 83){								// Delete - RAWSNAP  ( also "b")
 					snapshot (0, 0);
 				}
-				
-				if (w==0x3D){								// f3 - moviestat
+                
+				if (w==0x3D){ // F3 - moviestat
 					if (draw_hud == 1) {
                         if (moviestat == 0){
                             moviestat = 1;
@@ -4756,6 +4756,22 @@ void planetary_main ()
                         }
                     }
 				}
+                /*
+                if (w==0x3C) { // F2 - HUD toggle
+                    if (about == 0) {
+                        if (draw_hud == 1) {
+                            draw_hud = 0;
+                            moviestat = 0;
+                        }
+                        else if (draw_hud == 0) {
+                            draw_hud = -1;
+                        }
+                        else {
+                            draw_hud = 1;
+                        }
+                    }
+                }
+                */
 				if (w==0x3B) { // F1 - help & about
 					if (about == 0){
 						about = 1;

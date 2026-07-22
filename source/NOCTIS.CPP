@@ -3544,9 +3544,8 @@ void main ()
 		// disegna i bordi dello scafandro, illuminati in relazione
 		// all'ambiente circostante.
 		//
-        if (draw_hud != -1) {
-            surrounding (0, 180);
-        }
+        surrounding (0, 180);
+        
 		// riduzione stanchezza (continua, eventualmente
 		// dall'ultima volta che si � scesi in superficie)
 		// e variazioni nelle pulsazioni, pi� verosimili...
@@ -3921,6 +3920,7 @@ void main ()
 						about = 0;
 					}
 				}
+                /*
                 if (c==0x3C) { // F2 - HUD toggle
                     if (about == 0) {
                         if (draw_hud == 1) {
@@ -3932,6 +3932,7 @@ void main ()
                         }
                     }
                 }
+                */
 				if (c==0x3D){ // f3 - moviestat
 					if (draw_hud == 1) {
                         if (moviestat == 0){
@@ -4435,7 +4436,7 @@ void ShowAboutPage(char surface) {
 	} else {
 		wrouthud (14, 37, NULL, "SHORTCUT KEYS (WHEN IN SPACE):");
 		wrouthud (14, 53, NULL, "M OR ASTERISK - SNAPSHOT                     B - RAW SNAPSHOT");
-		wrouthud (14, 59, NULL, "F3 - MOVIEMAKER                              F2 - TOGGLE HUD");
+		wrouthud (14, 59, NULL, "F3 - MOVIEMAKER");
 		wrouthud (14, 65, NULL, "TAB - TOGGLE ANTIALIASING");
 		wrouthud (14, 71, NULL, "S - TOGGLE ROOFSPEED");
         wrouthud (14, 77, NULL, "DOWN ARROW - TOGGLE MOUSELOOK");
