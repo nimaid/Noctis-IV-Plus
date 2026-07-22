@@ -459,7 +459,6 @@ void freeze ()
 	WRITEFILE (fh, &lastSnapshot, sizeof(lastSnapshot));				//36
 	WRITEFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 	WRITEFILE (fh, &roofspeed, sizeof(roofspeed));
-	WRITEFILE (fh, &option_antialias_in_stardrifter, sizeof(option_antialias_in_stardrifter));
 	_close (fh);
 }
 
@@ -1990,7 +1989,6 @@ void unfreeze ()
 		READFILE (fh, &lastSnapshot, sizeof(lastSnapshot));				//36
 		READFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 		READFILE (fh, &roofspeed, sizeof(roofspeed));
-		READFILE (fh, &option_antialias_in_stardrifter, sizeof(option_antialias_in_stardrifter));
 		strcpy(fcs_status_extended, fcs_status_extended);
 		_close (fh);
 	}
@@ -2965,12 +2963,10 @@ void main ()
 		// straordinariamente belli su uno schermo che, di per s�,
 		// � poco risolutivo, sia fisicamente che cromaticamente.
 		//
-		if (option_antialias_in_stardrifter){
-			QUADWORDS -= 240;
-			psmooth_64 (adapted, 200);
-			psmooth_64 (adapted, 200);
-			QUADWORDS += 240;
-		}
+        QUADWORDS -= 240;
+        psmooth_64 (adapted, 200);
+        psmooth_64 (adapted, 200);
+        QUADWORDS += 240;
 		//
 		// Tracciamento di tutte le stelle visibili.
 		//
@@ -3954,15 +3950,15 @@ void main ()
                         }
                     }
                 }
+                /*
                 if (c == 0x49) {
-					//openhuddelta = -5;
-					//hud_closed = 0;
-                    option_antialias_in_stardrifter = 0;
+					openhuddelta = -5;
+					hud_closed = 0;
 				}
 				if (c == 0x51) {
-					//openhuddelta = +5;
-                    option_antialias_in_stardrifter = 1;
+					openhuddelta = +5;
                 }
+                */
 				if (c==0x3D){ // f3 - moviestat
 					if (draw_hud == 1) {
                         if (moviestat == 0){
@@ -4420,13 +4416,6 @@ void main ()
 				if (c=='-' && surlight > 10 && !moviestat) surlight--;
 				//if (c=='+' && surlight < 63) surlight++;
 				//if (c=='-' && surlight > 10) surlight--;
-				if (c==9) {								// TAB - antialiasing on/off
-					if (option_antialias_in_stardrifter == 0) {
-						option_antialias_in_stardrifter = 1;
-					} else {
-						option_antialias_in_stardrifter = 0;
-					}
-				}
 			}
 	endmain: 
 		
@@ -4467,9 +4456,8 @@ void ShowAboutPage(char surface) {
 		wrouthud (14, 37, NULL, "SHORTCUT KEYS (WHEN IN SPACE):");
 		wrouthud (14, 53, NULL, "M OR ASTERISK - SNAPSHOT                     B - RAW SNAPSHOT");
 		wrouthud (14, 59, NULL, "F3 - MOVIEMAKER                              F2 - TOGGLE HUD");
-		wrouthud (14, 65, NULL, "TAB - TOGGLE ANTIALIASING");
-		wrouthud (14, 71, NULL, "S - TOGGLE ROOFSPEED");
-        wrouthud (14, 77, NULL, "DOWN ARROW - TOGGLE MOUSELOOK");
+		wrouthud (14, 65, NULL, "S - TOGGLE ROOFSPEED");
+        wrouthud (14, 71, NULL, "DOWN ARROW - TOGGLE MOUSELOOK");
 	}
 	areaclear (adapted, 11, 178, 310, 188, 0, 0, 72);
 	if (charge<0) {
