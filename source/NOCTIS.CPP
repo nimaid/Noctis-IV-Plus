@@ -459,6 +459,9 @@ void freeze ()
 	WRITEFILE (fh, &lastSnapshot, sizeof(lastSnapshot));				//36
 	WRITEFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 	WRITEFILE (fh, &roofspeed, sizeof(roofspeed));
+	WRITEFILE (fh, &openhudcount, sizeof(openhudcount));
+	WRITEFILE (fh, &openhuddelta, sizeof(openhuddelta));
+	WRITEFILE (fh, &hud_closed, sizeof(hud_closed));
 	_close (fh);
 }
 
@@ -1189,6 +1192,10 @@ char about = 0;
 
 // Variables for HUD toggle (nimaid)
 char draw_hud = 1;
+
+int	openhudcount = 180;
+int	openhuddelta = 0;
+char hud_closed = 1;
 
 unsigned char far * ctrlkeys     = (unsigned char far *) 0x00000417;
 
@@ -1989,6 +1996,9 @@ void unfreeze ()
 		READFILE (fh, &lastSnapshot, sizeof(lastSnapshot));				//36
 		READFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 		READFILE (fh, &roofspeed, sizeof(roofspeed));
+        READFILE (fh, &openhudcount, sizeof(openhudcount));
+        READFILE (fh, &openhuddelta, sizeof(openhuddelta));
+        READFILE (fh, &hud_closed, sizeof(hud_closed));
 		strcpy(fcs_status_extended, fcs_status_extended);
 		_close (fh);
 	}
@@ -2245,26 +2255,6 @@ void main ()
 
 	do {
 		sync_start ();
-		/*
-        // effetto di apertura della visiera dell'HUD.
-		if (openhuddelta < 0) {
-			openhudcount += openhuddelta;
-			if (openhudcount <= 0) {
-				openhuddelta = 0;
-				openhudcount = 0;
-			}
-		}
-		// effetto di chiusura della visiera dell'HUD.
-		if (openhuddelta > 0) {
-			openhudcount += openhuddelta;
-			if (openhudcount >= 180) {
-				openhuddelta = 0;
-				openhudcount = 180;
-				hud_closed = 1;
-			}
-		}
-        */
-        
 		//
 		// Controllo del flag che indica quando ci si trova
 		// sulla "terrazza panoramica", il tetto dello stardrifter.
@@ -2963,10 +2953,13 @@ void main ()
 		// straordinariamente belli su uno schermo che, di per s�,
 		// � poco risolutivo, sia fisicamente che cromaticamente.
 		//
-        QUADWORDS -= 240;
-        psmooth_64 (adapted, 200);
-        psmooth_64 (adapted, 200);
-        QUADWORDS += 240;
+        pqw = QUADWORDS;
+        QUADWORDS = 160 + openhudcount * 80;
+        psmooth_64 (adapted, 160);
+        psmooth_64 (adapted, 160);
+        QUADWORDS = pqw;
+    
+        
 		//
 		// Tracciamento di tutte le stelle visibili.
 		//
@@ -3560,7 +3553,7 @@ void main ()
 		// all'ambiente circostante.
 		//
         if (draw_hud != -1) {
-            surrounding (0, 180);
+            surrounding (0, openhudcount);
         }
 		// riduzione stanchezza (continua, eventualmente
 		// dall'ultima volta che si � scesi in superficie)
@@ -3604,6 +3597,23 @@ void main ()
 				resolve = 0;
 				_delay = 13; // solo al ritorno da superficie
 				goto resynctoplanet;
+			}
+		}
+        // effetto di apertura della visiera dell'HUD.
+		if (openhuddelta < 0) {
+			openhudcount += openhuddelta;
+			if (openhudcount <= 0) {
+				openhuddelta = 0;
+				openhudcount = 0;
+			}
+		}
+		// effetto di chiusura della visiera dell'HUD.
+		if (openhuddelta > 0) {
+			openhudcount += openhuddelta;
+			if (openhudcount >= 180) {
+				openhuddelta = 0;
+				openhudcount = 180;
+				hud_closed = 1;
 			}
 		}
 		//
@@ -3950,15 +3960,13 @@ void main ()
                         }
                     }
                 }
-                /*
-                if (c == 0x49) {
+                if (c == 0x49) { // Page Up - Open visor
 					openhuddelta = -5;
 					hud_closed = 0;
 				}
-				if (c == 0x51) {
+				if (c == 0x51) { // Page Down - Close visor
 					openhuddelta = +5;
                 }
-                */
 				if (c==0x3D){ // f3 - moviestat
 					if (draw_hud == 1) {
                         if (moviestat == 0){

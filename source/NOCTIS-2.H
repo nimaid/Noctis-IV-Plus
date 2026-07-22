@@ -6,6 +6,3 @@ extern void ShowMovieSetup(int moviefsec, char movieflash, int moviedeck);
 extern void wrouthud (unsigned x, unsigned y, unsigned l, char *text);
 extern void FitOutHudBuffer(int min, int max);
 extern void ShowAboutPage(char surface);
-extern int openhuddelta;
-extern int openhudcount;
-extern char hud_closed;
