@@ -6148,8 +6148,8 @@ void surrounding (char compass_on, int openhudcount)
 	for (lptr=0; lptr<04; lptr++) areaclear (adapted, 10, openhudcount + 9 - lptr, 0, 0, 300, 1, 54 + surlight + 3*lptr);
 	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 0, 9 - lptr, 0, 0, 320, 1, 64 + surlight - lptr);
 	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 0, 190 + lptr, 0, 0, 320, 1, 64 + surlight - lptr);
-	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 9 - lptr, 10, 0, 0, 1, 180, 64 + surlight - lptr);
-	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 310 + lptr, 10, 0, 0, 1, 180, 64 + surlight - lptr);
+	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 9 - lptr, 10 - (lptr + 1), 0, 0, 1, 180 + 20 - ((9 - lptr) * 2), 64 + surlight - lptr);
+	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 310 + lptr, 10 - (lptr + 1), 0, 0, 1, 180 + 20 - ((9 - lptr) * 2), 64 + surlight - lptr);
 
 	lptr = 64 + 3 * surlight;
 	if (lptr > 127) lptr = 127;
