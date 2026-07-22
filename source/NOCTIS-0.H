@@ -488,7 +488,3 @@ extern float	pp_pressure;
 extern float    pp_pulse;
 
 extern void additional_consumes (void);
-
-extern int openhudcount;
-extern int openhuddelta;
-extern char	hud_closed;
