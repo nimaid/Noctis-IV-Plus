@@ -3337,10 +3337,7 @@ void planetary_main ()
 	extern int moviedeck;
 	int movie_cutoff=0;
 	/*global*/opencapcount= 1;
-	int	 opencapdelta = 0;
-	int	 openhudcount = 180;
-	int	 openhuddelta = 0;
-	char	 hud_closed   = 1;
+	int	      opencapdelta = 0;
 	char	 widesnapping = 0;
 
 	int 	 w, lw = 10, now = 25, waveratio = 5, waveblur = 0;
@@ -3734,9 +3731,6 @@ void planetary_main ()
 			_read (sfh, &pos_z, 4);
 			_read (sfh, &user_alfa, 4);
 			_read (sfh, &user_beta, 4);
-			_read (sfh, &openhuddelta, 2);
-			_read (sfh, &openhudcount, 2);
-			_read (sfh, &hud_closed, 1);
 			_close (sfh);
 			landed = 1;
 			opencapdelta = 0;
@@ -4932,9 +4926,6 @@ void planetary_main ()
 						_write (sfh, &pos_z, 4);
 						_write (sfh, &user_alfa, 4);
 						_write (sfh, &user_beta, 4);
-						_write (sfh, &openhuddelta, 2);
-						_write (sfh, &openhudcount, 2);
-						_write (sfh, &hud_closed, 1);
 						_close (sfh);
 						exitflag = 1;
 						goto nodissolve;
