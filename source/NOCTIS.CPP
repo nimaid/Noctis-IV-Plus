@@ -3916,9 +3916,6 @@ void main ()
                             draw_hud = 0;
                             moviestat = 0;
                         }
-                        else if (draw_hud == 0) {
-                            draw_hud = -1;
-                        }
                         else {
                             draw_hud = 1;
                         }

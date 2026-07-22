@@ -4544,13 +4544,11 @@ void planetary_main ()
 		}
 		
 		// il fotogramma � finito. ora lo visualizza.
-        if (draw_hud != -1) {
-            if (draw_hud == 1) {
-                surrounding (1, openhudcount);
-            }
-            else {
-                surrounding (0, openhudcount);
-            }
+        if (draw_hud == 1) {
+            surrounding (1, openhudcount);
+        }
+        else {
+            surrounding (0, openhudcount);
         }
 		QUADWORDS = 16000;
 		if (!widesnapping) pcopy (adaptor, adapted);
