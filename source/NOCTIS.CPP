@@ -92,7 +92,7 @@ void alogena ()
 	}
 
 	if (ilightv==1 && !elight)
-		lens_flares_for (cam_x, cam_y, cam_z, -10, 10, -10, -50000, 2, 1, 0, 1, 1);
+		lens_flares_for (cam_x, cam_y, cam_z, -10, 10, -10, -50000, 2, hud_closed, 0, 1, 1);
 }
 
 /* Quadranti di selezione del computer di bordo. */
@@ -1166,10 +1166,10 @@ void other_vehicle_at (double ovhx, double ovhy, double ovhz)
 	resetfx ();
 	cam_z -= 3100;
 
-	lens_flares_for (cam_x, cam_y, cam_z, 3225, 0, 0, -5e5, 3, 1, 1, 1, 1);
-	lens_flares_for (cam_x, cam_y, cam_z, -3225, 0, 0, -5e5, 3, 1, 1, 1, 1);
-	lens_flares_for (cam_x, cam_y, cam_z, 3225, 0, -6150, -5e5, 3, 1, 1, 1, 1);
-	lens_flares_for (cam_x, cam_y, cam_z, -3225, 0, -6150, -5e5, 3, 1, 1, 1, 1);
+	lens_flares_for (cam_x, cam_y, cam_z, 3225, 0, 0, -5e5, 3, hud_closed, 1, 1, 1);
+	lens_flares_for (cam_x, cam_y, cam_z, -3225, 0, 0, -5e5, 3, hud_closed, 1, 1, 1);
+	lens_flares_for (cam_x, cam_y, cam_z, 3225, 0, -6150, -5e5, 3, hud_closed, 1, 1, 1);
+	lens_flares_for (cam_x, cam_y, cam_z, -3225, 0, -6150, -5e5, 3, hud_closed, 1, 1, 1);
 }
 
 
@@ -2545,7 +2545,7 @@ void main ()
 				if (p_dsd>5*nearstar_p_ray[ir]&&p_dsd<1000*nearstar_p_ray[ir])
 					lens_flares_for (dzat_x, dzat_y, dzat_z, plx, ply, plz,
 							(10 * nearstar_p_ray[ir]) / p_dsd,
-							1 + (0.001 * p_dsd), 1, 0, 3, 0);
+							1 + (0.001 * p_dsd), hud_closed, 0, 3, 0);
 			}
 		}
 		if (l_dsd > 6 * nearstar_ray) {
@@ -2554,7 +2554,7 @@ void main ()
 					if (l_dsd>5*nearstar_ray&&l_dsd<1000*nearstar_ray) {
 						lens_flares_for (dzat_x, dzat_y, dzat_z,
 								 nearstar_x, nearstar_y, nearstar_z,
-								 (10 * nearstar_ray) / l_dsd, 1 + (0.001 * l_dsd), 1, 0, 3, 0);
+								 (10 * nearstar_ray) / l_dsd, 1 + (0.001 * l_dsd), hud_closed, 0, 3, 0);
 					}
 				}
 			}
