@@ -5938,7 +5938,7 @@ void cupola (float y_or, float brk)
 					 +cupsize * clon * sin(lat),
 					 -cupheight * 	   cos(lat),
 					 +cupsize * slon * sin(lat),
-					 -50000, 10, 1, 0, 1, 1);
+					 -50000, 10, hud_closed, 0, 1, 1);
 			flares = 0;
 		}
 	}
