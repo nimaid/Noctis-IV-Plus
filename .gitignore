@@ -11,3 +11,5 @@ source/BIN/*
 *.zip
 /bc.31
 /bin
+data/starmap2.bin
+*.lnk
