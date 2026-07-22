@@ -2388,11 +2388,22 @@ void main ()
 		mouse_input ();
 		if (mpul&2) {
 			shift += 3*mdltx;
-			dlt_alfa -= (float) mdlty / 8;
+            if (option_mouseLook == 0) {
+                dlt_alfa -= (float) mdlty / 8;
+            } else {
+                step -= 3*mdlty;
+                if (abs(mdlty)>7) dlt_alfa = -user_alfa / 6;
+            }
 		}
 		else {
-			step -= 3*mdlty;
-			if (abs(mdlty)>7) dlt_alfa = -user_alfa / 6;
+            if (option_mouseLook == 1) {
+                dlt_alfa += (float) mdlty / 8;
+            } else if (option_mouseLook == 2) {
+                dlt_alfa -= (float) mdlty / 8;
+            } else {
+			    step -= 3*mdlty;
+                if (abs(mdlty)>7) dlt_alfa = -user_alfa / 6;
+            }
 			dlt_beta -= (float) mdltx / 3;
 		}
 		//
@@ -4063,9 +4074,23 @@ void main ()
 					dlt_nav_beta -= 1.5;
 					status ("PITCH - L", 25);
 				}
-				if (c==72)
+				if (c==72) {
 					lifter = -100;
-				
+				}
+                if (c==80) { // Down arrow - change space mouselook mode
+                    if (option_mouseLook == 0) {
+                        option_mouseLook = 1;
+                        status("MOUSELOOK ON", 50);
+                    }
+                    else if (option_mouseLook == 1) {
+                        option_mouseLook = 2;
+                        status("INV. Y AXIS", 50);
+                    }
+                    else {
+                        option_mouseLook = 0;
+                        status("MOUSELOOK OFF", 50);
+                    }
+                }
 			}
 			else {
 				goesk_a_reentry:
@@ -4430,14 +4455,15 @@ void ShowAboutPage(char surface) {
 		wrouthud (14,71, NULL,  "M OR ASTERISK - SNAPSHOT                    N OR / - WIDE SNAPSHOT");
 		wrouthud (14,77, NULL,  "B OR DELETE - RAW SNAPSHOT");
 		wrouthud (14,83, NULL,  "F3 - MOVIEMAKER");
-        wrouthud (14,89, NULL,  "TAB - TOGGLE LENS FLARES");
-		wrouthud (14,95, NULL,  "UP ARROW - TOGGLE MOUSELOOK");
+    wrouthud (14,89, NULL,  "TAB - TOGGLE LENS FLARES");
+		wrouthud (14,89, NULL,  "DOWN ARROW - TOGGLE MOUSELOOK");
 	} else {
 		wrouthud (14, 37, NULL, "SHORTCUT KEYS (WHEN IN SPACE):");
 		wrouthud (14, 53, NULL, "M OR ASTERISK - SNAPSHOT                    B - RAW SNAPSHOT");
 		wrouthud (14, 59, NULL, "F3 - MOVIEMAKER");
 		wrouthud (14, 65, NULL, "TAB - TOGGLE LENS FLARES");
 		wrouthud (14, 71, NULL, "S - TOGGLE ROOFSPEED");
+    wrouthud (14, 77, NULL, "DOWN ARROW - TOGGLE MOUSELOOK");
 	}
 	areaclear (adapted, 11, 178, 310, 188, 0, 0, 72);
 	if (charge<0) {

@@ -7,8 +7,8 @@ CC = bcc +NOCTIS.CFG
 TASM = tasm
 TLIB = tlib
 TLINK = tlink
-LIBPATH = C:\BC.31\LIB
-INCLUDEPATH = C:\BC.31\INCLUDE
+LIBPATH = N:\BC.31\LIB
+INCLUDEPATH = N:\BC.31\INCLUDE
 
 
 #		*Implicit Rules*
