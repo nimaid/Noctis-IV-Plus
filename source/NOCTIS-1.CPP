@@ -4969,15 +4969,15 @@ void planetary_main ()
                 if (w == 9) { // Tab - Lens flare mode toggle
 					if (lens_flare_mode == 0) {
 						lens_flare_mode = 1;
-                        status("FLARES ON", 50);
+                        status("LENS FLARES ON", 50);
 					}
                     else if (lens_flare_mode == 1) {
                         lens_flare_mode = -1;
-                        status("FLARES OFF", 50);
+                        status("LENS FLARES OFF", 50);
                     }
                     else {
 						lens_flare_mode = 0;
-                        status("VISOR FLARES", 50);
+                        status("VISOR LENS FLARES", 50);
 					}
 				}
 			}
