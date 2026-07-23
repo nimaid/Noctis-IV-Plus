@@ -460,6 +460,9 @@ void freeze ()
 	WRITEFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 	WRITEFILE (fh, &roofspeed, sizeof(roofspeed));
 	WRITEFILE (fh, &hud_closed, sizeof(hud_closed));
+    WRITEFILE (fh, &draw_hud, sizeof(draw_hud));
+    WRITEFILE (fh, &lens_flare_mode, sizeof(lens_flare_mode));
+    WRITEFILE (fh, &seamless_border, sizeof(seamless_border));
 	_close (fh);
 }
 
@@ -1998,6 +2001,9 @@ void unfreeze ()
 		READFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 		READFILE (fh, &roofspeed, sizeof(roofspeed));
         READFILE (fh, &hud_closed, sizeof(hud_closed));
+        READFILE (fh, &draw_hud, sizeof(draw_hud));
+        READFILE (fh, &lens_flare_mode, sizeof(lens_flare_mode));
+        READFILE (fh, &seamless_border, sizeof(seamless_border));
 		strcpy(fcs_status_extended, fcs_status_extended);
 		_close (fh);
         
