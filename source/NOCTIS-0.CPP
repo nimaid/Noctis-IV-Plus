@@ -810,7 +810,6 @@ Word old_currentbin_length = 245;
 //Additional variables: (SL and Mega)
 Dword lastSnapshot = -1;				//0
 char option_mouseLook = 0;			//4
-char option_antialias_in_stardrifter = 1;
 
 Word new_currentbin_length = 5;
 char 	fcs_status_extended[42] = "STANDBY";
@@ -3652,7 +3651,9 @@ void lens_flares_for (double cam_x, double cam_y, double cam_z,
 	unsigned char temp;
 
 	int c, r;
-
+    
+    char on_hud_forced = (((on_hud == 1) && (lens_flare_mode == 0)) || (lens_flare_mode == 1));
+    
 	setfx (1);
 
 	xx = xlight - cam_x;
@@ -3684,7 +3685,7 @@ void lens_flares_for (double cam_x, double cam_y, double cam_z,
 				dx = lft_cos[c] * k * l;
 				dy = lft_sin[c] * k * l;
 				fline (xs-dx, ys-dy, xs+dx, ys+dy);
-				if (on_hud && !(c%8)) {
+				if (on_hud_forced && !(c%8)) {
 					dx /= 10; dy /= 10;
 					xr = (float)xs * -0.1;
 					yr = (float)ys * -0.1;
@@ -5939,7 +5940,7 @@ void cupola (float y_or, float brk)
 					 +cupsize * clon * sin(lat),
 					 -cupheight * 	   cos(lat),
 					 +cupsize * slon * sin(lat),
-					 -50000, 10, 1, 0, 1, 1);
+					 -50000, 10, hud_closed, 0, 1, 1);
 			flares = 0;
 		}
 	}
@@ -6146,14 +6147,14 @@ int  blnr;
 
 
 
-void surrounding (char compass_on, int openhudcount)
+void surrounding (char compass_on, int openhudcount_in)
 {
 	int	cpos, crem;
 	long	lsecs, lptr;
 	float	pp_delta, ccom;
 
 	if (draw_hud == 1) {
-        for (lptr=0; lptr<04; lptr++) areaclear (adapted, 10, openhudcount + 9 - lptr, 0, 0, 300, 1, 54 + surlight + 3*lptr);
+        for (lptr=0; lptr<04; lptr++) areaclear (adapted, 10, openhudcount_in + 9 - lptr, 0, 0, 300, 1, 54 + surlight + 3*lptr);
     }
 	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 0, 9 - lptr, 0, 0, 320, 1, 64 + surlight - lptr);
 	for (lptr=0; lptr<10; lptr++) areaclear (adapted, 0, 190 + lptr, 0, 0, 320, 1, 64 + surlight - lptr);

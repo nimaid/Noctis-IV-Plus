@@ -92,7 +92,7 @@ void alogena ()
 	}
 
 	if (ilightv==1 && !elight)
-		lens_flares_for (cam_x, cam_y, cam_z, -10, 10, -10, -50000, 2, 1, 0, 1, 1);
+		lens_flares_for (cam_x, cam_y, cam_z, -10, 10, -10, -50000, 2, hud_closed, 0, 1, 1);
 }
 
 /* Quadranti di selezione del computer di bordo. */
@@ -459,7 +459,7 @@ void freeze ()
 	WRITEFILE (fh, &lastSnapshot, sizeof(lastSnapshot));				//36
 	WRITEFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 	WRITEFILE (fh, &roofspeed, sizeof(roofspeed));
-	WRITEFILE (fh, &option_antialias_in_stardrifter, sizeof(option_antialias_in_stardrifter));
+	WRITEFILE (fh, &hud_closed, sizeof(hud_closed));
 	_close (fh);
 }
 
@@ -1164,10 +1164,10 @@ void other_vehicle_at (double ovhx, double ovhy, double ovhz)
 	resetfx ();
 	cam_z -= 3100;
 
-	lens_flares_for (cam_x, cam_y, cam_z, 3225, 0, 0, -5e5, 3, 1, 1, 1, 1);
-	lens_flares_for (cam_x, cam_y, cam_z, -3225, 0, 0, -5e5, 3, 1, 1, 1, 1);
-	lens_flares_for (cam_x, cam_y, cam_z, 3225, 0, -6150, -5e5, 3, 1, 1, 1, 1);
-	lens_flares_for (cam_x, cam_y, cam_z, -3225, 0, -6150, -5e5, 3, 1, 1, 1, 1);
+	lens_flares_for (cam_x, cam_y, cam_z, 3225, 0, 0, -5e5, 3, hud_closed, 1, 1, 1);
+	lens_flares_for (cam_x, cam_y, cam_z, -3225, 0, 0, -5e5, 3, hud_closed, 1, 1, 1);
+	lens_flares_for (cam_x, cam_y, cam_z, 3225, 0, -6150, -5e5, 3, hud_closed, 1, 1, 1);
+	lens_flares_for (cam_x, cam_y, cam_z, -3225, 0, -6150, -5e5, 3, hud_closed, 1, 1, 1);
 }
 
 
@@ -1190,6 +1190,12 @@ char about = 0;
 
 // Variables for HUD toggle (nimaid)
 char draw_hud = 1;
+
+int	openhudcount = 180;
+int	openhuddelta = 0;
+char hud_closed = 1;
+
+char lens_flare_mode = 0;
 
 unsigned char far * ctrlkeys     = (unsigned char far *) 0x00000417;
 
@@ -1990,9 +1996,15 @@ void unfreeze ()
 		READFILE (fh, &lastSnapshot, sizeof(lastSnapshot));				//36
 		READFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 		READFILE (fh, &roofspeed, sizeof(roofspeed));
-		READFILE (fh, &option_antialias_in_stardrifter, sizeof(option_antialias_in_stardrifter));
+        READFILE (fh, &hud_closed, sizeof(hud_closed));
 		strcpy(fcs_status_extended, fcs_status_extended);
 		_close (fh);
+        
+        if (hud_closed == 1) {
+            openhudcount = 180;
+        } else {
+            openhudcount = 0;
+        }
 	}
 	else
 		return;
@@ -2538,7 +2550,7 @@ void main ()
 				if (p_dsd>5*nearstar_p_ray[ir]&&p_dsd<1000*nearstar_p_ray[ir])
 					lens_flares_for (dzat_x, dzat_y, dzat_z, plx, ply, plz,
 							(10 * nearstar_p_ray[ir]) / p_dsd,
-							1 + (0.001 * p_dsd), 1, 0, 3, 0);
+							1 + (0.001 * p_dsd), hud_closed, 0, 3, 0);
 			}
 		}
 		if (l_dsd > 6 * nearstar_ray) {
@@ -2547,7 +2559,7 @@ void main ()
 					if (l_dsd>5*nearstar_ray&&l_dsd<1000*nearstar_ray) {
 						lens_flares_for (dzat_x, dzat_y, dzat_z,
 								 nearstar_x, nearstar_y, nearstar_z,
-								 (10 * nearstar_ray) / l_dsd, 1 + (0.001 * l_dsd), 1, 0, 3, 0);
+								 (10 * nearstar_ray) / l_dsd, 1 + (0.001 * l_dsd), hud_closed, 0, 3, 0);
 					}
 				}
 			}
@@ -2946,12 +2958,13 @@ void main ()
 		// straordinariamente belli su uno schermo che, di per s�,
 		// � poco risolutivo, sia fisicamente che cromaticamente.
 		//
-		if (option_antialias_in_stardrifter){
-			QUADWORDS -= 240;
-			psmooth_64 (adapted, 200);
-			psmooth_64 (adapted, 200);
-			QUADWORDS += 240;
-		}
+        pqw = QUADWORDS;
+        QUADWORDS = 160 + openhudcount * 80;
+        psmooth_64 (adapted, 160);
+        psmooth_64 (adapted, 160);
+        QUADWORDS = pqw;
+    
+        
 		//
 		// Tracciamento di tutte le stelle visibili.
 		//
@@ -3544,7 +3557,7 @@ void main ()
 		// disegna i bordi dello scafandro, illuminati in relazione
 		// all'ambiente circostante.
 		//
-        surrounding (0, 180);
+        surrounding (0, openhudcount);
         
 		// riduzione stanchezza (continua, eventualmente
 		// dall'ultima volta che si � scesi in superficie)
@@ -3588,6 +3601,23 @@ void main ()
 				resolve = 0;
 				_delay = 13; // solo al ritorno da superficie
 				goto resynctoplanet;
+			}
+		}
+        // effetto di apertura della visiera dell'HUD.
+		if (openhuddelta < 0) {
+			openhudcount += openhuddelta;
+			if (openhudcount <= 0) {
+				openhuddelta = 0;
+				openhudcount = 0;
+			}
+		}
+		// effetto di chiusura della visiera dell'HUD.
+		if (openhuddelta > 0) {
+			openhudcount += openhuddelta;
+			if (openhudcount >= 180) {
+				openhuddelta = 0;
+				openhudcount = 180;
+				hud_closed = 1;
 			}
 		}
 		//
@@ -3933,6 +3963,13 @@ void main ()
                     }
                 }
                 */
+                if (c == 0x49) { // Page Up - Open visor
+					openhuddelta = -5;
+					hud_closed = 0;
+				}
+				if (c == 0x51) { // Page Down - Close visor
+					openhuddelta = +5;
+                }
 				if (c==0x3D){ // f3 - moviestat
 					if (draw_hud == 1) {
                         if (moviestat == 0){
@@ -4390,13 +4427,6 @@ void main ()
 				if (c=='-' && surlight > 10 && !moviestat) surlight--;
 				//if (c=='+' && surlight < 63) surlight++;
 				//if (c=='-' && surlight > 10) surlight--;
-				if (c==9) {								// TAB - antialiasing on/off
-					if (option_antialias_in_stardrifter == 0) {
-						option_antialias_in_stardrifter = 1;
-					} else {
-						option_antialias_in_stardrifter = 0;
-					}
-				}
 			}
 	endmain: 
 		
@@ -4427,17 +4457,16 @@ void ShowAboutPage(char surface) {
 	if (surface) {
 		wrouthud (14, 37, NULL, "SURFACE SHORTCUT KEYS:");
 		wrouthud (14,53, NULL,  "0-9 - MOVEMENT SPEED");
-		wrouthud (14,59, NULL,   "J - JUMP                                    L - LAND ON SURFACE");
-		wrouthud (14,65, NULL,   "SPACE - JETPACK                             C - DISENGAGE JETPACK CONTROL");
-		wrouthud (14,71, NULL,   "M OR ASTERISK - SNAPSHOT                    N OR / - WIDE SNAPSHOT");
-		wrouthud (14,77, NULL,   "B OR DELETE - RAW SNAPSHOT                  V OR + - RAW WIDE SNAPSHOT");
-		wrouthud (14,83, NULL,   "F3 - MOVIEMAKER");
+		wrouthud (14,59, NULL,  "J - JUMP                                    L - LAND ON SURFACE");
+		wrouthud (14,65, NULL,  "SPACE - JETPACK                             C - DISENGAGE JETPACK CONTROL");
+		wrouthud (14,71, NULL,  "M OR ASTERISK - SNAPSHOT                    N OR / - WIDE SNAPSHOT");
+		wrouthud (14,77, NULL,  "B OR DELETE - RAW SNAPSHOT");
+		wrouthud (14,83, NULL,  "F3 - MOVIEMAKER");
 		wrouthud (14,89, NULL,  "DOWN ARROW - TOGGLE MOUSELOOK");
 	} else {
 		wrouthud (14, 37, NULL, "SHORTCUT KEYS (WHEN IN SPACE):");
-		wrouthud (14, 53, NULL, "M OR ASTERISK - SNAPSHOT                     B - RAW SNAPSHOT");
+		wrouthud (14, 53, NULL, "M OR ASTERISK - SNAPSHOT                    B - RAW SNAPSHOT");
 		wrouthud (14, 59, NULL, "F3 - MOVIEMAKER");
-		wrouthud (14, 65, NULL, "TAB - TOGGLE ANTIALIASING");
 		wrouthud (14, 71, NULL, "S - TOGGLE ROOFSPEED");
         wrouthud (14, 77, NULL, "DOWN ARROW - TOGGLE MOUSELOOK");
 	}
