@@ -2259,7 +2259,7 @@ void main ()
 
 	do {
 		sync_start ();
-        
+		
 		//
 		// Controllo del flag che indica quando ci si trova
 		// sulla "terrazza panoramica", il tetto dello stardrifter.
