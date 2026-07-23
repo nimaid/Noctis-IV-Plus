@@ -1602,7 +1602,7 @@ void srf_darkline (unsigned char huge *map, int length,
 	}
 }
 
-void felysian_srf_darkline (unsigned char huge *map, int length,
+void felisian_srf_darkline (unsigned char huge *map, int length,
 			    int x_trend, int z_trend, long align)
 { // Un crepaccio (versione principalmente per superfici).
 	int fx = random(align), fz = random(align);
@@ -1796,7 +1796,7 @@ void make_ruins (char style1, char style2, char style3,
 			case 4: bstyle = style5;
 		}
 		switch (bstyle) {
-		// Stili Felysiani antichi.
+		// Stili Felisiani antichi.
 		case 0:
 			// grossi grattacieli
 			hr = 10 + random(25);
@@ -1878,7 +1878,7 @@ void make_ruins (char style1, char style2, char style3,
 				}
 			}
 			break;
-		// Stili Felysiani coloniali.
+		// Stili Felisiani coloniali.
 		case 3:
 			// palazzine e piccoli grattacieli
 			hr = 10 + random(10);
@@ -2583,7 +2583,7 @@ void build_surface ()
 	n = random (5);
 	if (n) {
 		while (n) { // crepacci nella superficie possono essere ovunque
-			felysian_srf_darkline (p_surfacemap, random(500), -1, -1, 200);
+			felisian_srf_darkline (p_surfacemap, random(500), -1, -1, 200);
 			n--;
 		}
 		ptr1 = 200;

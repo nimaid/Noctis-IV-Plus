@@ -952,7 +952,7 @@ float  nearstar_p_qsortdist  [maxbodies];
 char *planet_description[] = { "medium size, internally hot, unstable surface, no atmosphere.",
 			       "small, solid, dusty, craterized, no atmosphere.",
 			       "medium size, solid, thick atmosphere, fully covered by clouds.",
-			       "medium size, felysian, breathable atmosphere, suitable for life.",
+			       "medium size, felisian, breathable atmosphere, suitable for life.",
 			       "medium size, rocky, creased, no atmosphere.",
 			       "small, solid, thin atmosphere.",
 			       "large, not consistent, covered with dense clouds.",
@@ -5065,14 +5065,14 @@ rndpat:	asm {   add ax, cx
 	/* rinormalizzazione superficie a intervallo 00-1F:
 	   solo se l'atmosfera del pianeta non deve influire
 	   sull'aspetto della superficie sottostante, quindi
-	   per pianeti felysiani e per quelli simili a marte. */
+	   per pianeti felisiani e per quelli simili a marte. */
 
 	if (type==3||type==5) {
 		for (px = 0; px < 64800; px++)
 			p_background[px] >>= 1;
 	}
 
-	/* ritocchi specifici finali alla superficie - pianeti felysiani */
+	/* ritocchi specifici finali alla superficie - pianeti felisiani */
 
 	if (type==3) {
 		if (ranged_fast_random(2))
