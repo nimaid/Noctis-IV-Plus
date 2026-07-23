@@ -460,7 +460,6 @@ void freeze ()
 	WRITEFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 	WRITEFILE (fh, &roofspeed, sizeof(roofspeed));
 	WRITEFILE (fh, &hud_closed, sizeof(hud_closed));
-	WRITEFILE (fh, &lens_flare_mode, sizeof(lens_flare_mode));
 	_close (fh);
 }
 
@@ -1995,7 +1994,6 @@ void unfreeze ()
 		READFILE (fh, &option_mouseLook, sizeof(option_mouseLook));				//40
 		READFILE (fh, &roofspeed, sizeof(roofspeed));
         READFILE (fh, &hud_closed, sizeof(hud_closed));
-        READFILE (fh, &lens_flare_mode, sizeof(lens_flare_mode));
 		strcpy(fcs_status_extended, fcs_status_extended);
 		_close (fh);
         
@@ -4406,20 +4404,6 @@ void main ()
 				if (c=='-' && surlight > 10 && !moviestat) surlight--;
 				//if (c=='+' && surlight < 63) surlight++;
 				//if (c=='-' && surlight > 10) surlight--;
-                if (c==9) { // Tab - Lens flare mode toggle
-					if (lens_flare_mode == 0) {
-						lens_flare_mode = 1;
-                        status("FLARES ON", 50);
-					}
-                    else if (lens_flare_mode == 1) {
-                        lens_flare_mode = -1;
-                        status("FLARES OFF", 50);
-                    }
-                    else {
-						lens_flare_mode = 0;
-                        status("VISOR FLARES", 50);
-					}
-				}
 			}
 	endmain: 
 		
@@ -4455,15 +4439,13 @@ void ShowAboutPage(char surface) {
 		wrouthud (14,71, NULL,  "M OR ASTERISK - SNAPSHOT                    N OR / - WIDE SNAPSHOT");
 		wrouthud (14,77, NULL,  "B OR DELETE - RAW SNAPSHOT");
 		wrouthud (14,83, NULL,  "F3 - MOVIEMAKER");
-    wrouthud (14,89, NULL,  "TAB - TOGGLE LENS FLARES");
 		wrouthud (14,89, NULL,  "DOWN ARROW - TOGGLE MOUSELOOK");
 	} else {
 		wrouthud (14, 37, NULL, "SHORTCUT KEYS (WHEN IN SPACE):");
 		wrouthud (14, 53, NULL, "M OR ASTERISK - SNAPSHOT                    B - RAW SNAPSHOT");
 		wrouthud (14, 59, NULL, "F3 - MOVIEMAKER");
-		wrouthud (14, 65, NULL, "TAB - TOGGLE LENS FLARES");
 		wrouthud (14, 71, NULL, "S - TOGGLE ROOFSPEED");
-    wrouthud (14, 77, NULL, "DOWN ARROW - TOGGLE MOUSELOOK");
+        wrouthud (14, 77, NULL, "DOWN ARROW - TOGGLE MOUSELOOK");
 	}
 	areaclear (adapted, 11, 178, 310, 188, 0, 0, 72);
 	if (charge<0) {

@@ -4943,20 +4943,6 @@ void planetary_main ()
 						goto nodissolve;
 					}
 				}
-                if (w == 9) { // Tab - Lens flare mode toggle
-					if (lens_flare_mode == 0) {
-						lens_flare_mode = 1;
-                        status("LENS FLARES ON", 50);
-					}
-                    else if (lens_flare_mode == 1) {
-                        lens_flare_mode = -1;
-                        status("LENS FLARES OFF", 50);
-                    }
-                    else {
-						lens_flare_mode = 0;
-                        status("VISOR LENS FLARES", 50);
-					}
-				}
 			}
 		}
 		endtype:
