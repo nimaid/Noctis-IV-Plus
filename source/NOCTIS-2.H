@@ -10,3 +10,4 @@ extern int openhudcount;
 extern int openhuddelta;
 extern char	hud_closed;
 extern char lens_flare_mode;
+extern char seamless_border;

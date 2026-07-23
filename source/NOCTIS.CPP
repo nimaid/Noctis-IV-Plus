@@ -1188,14 +1188,15 @@ int moviepaused=0;
 
 char about = 0;
 
-// Variables for HUD toggle (nimaid)
-char draw_hud = 1;
-
+// Variables for visor animation (nimaid)
 int	openhudcount = 180;
 int	openhuddelta = 0;
 char hud_closed = 1;
 
+// Variables for graphical tweaks (nimaid)
+char draw_hud = 1;
 char lens_flare_mode = 0;
+char seamless_border = 0;
 
 unsigned char far * ctrlkeys     = (unsigned char far *) 0x00000417;
 
